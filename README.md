@@ -8,6 +8,7 @@ The chosen city is Albuquerque, NM, USA, but any city public transport mapped wi
 
 A transit feed gtfs data can be downloaded from https://transitfeeds.com/feeds, the downloaded zip file should then be dropped in the "src/main/resources/gtfs" directory
 
+The full instructions are available in the doc/ directory
 
 
 GTFS documentation: https://developers.google.com/transit/gtfs
