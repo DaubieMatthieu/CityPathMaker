@@ -37,8 +37,6 @@ public class Service extends GenericGtfsVO {
         services.put(id, this);
     }
 
-    //TODO check the boolean are rightly processed
-
     @Override
     public String toString() {
         return "Service " + id;

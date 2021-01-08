@@ -27,6 +27,7 @@ public class Stop extends GenericGtfsVO {
     protected int locationType;
     @CsvBindByName(column = "parent_station")
     protected String parentStation;
+    //if locationType==0 -> connected to parent station
 
     public static Stop getStop(int id) {
         return stops.get(id);
@@ -42,5 +43,13 @@ public class Stop extends GenericGtfsVO {
         return name;
     }
 
-    //if locationType==0 -> connected to parentstation
+    public String getAddress() { return (description.isEmpty()?latitude+","+longitude:description); }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
 }

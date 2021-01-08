@@ -1,11 +1,11 @@
-package main.java.graph;
+package main.java.sp.graph;
 
-public class Edge<U, V> {
-    private final V label;
-    private final Vertex<U, V> destination;
+public class Edge<V, E> {
+    private final E label;
+    private final Vertex<V, E> destination;
     private final double weight;
 
-    public Edge(V label, Vertex<U, V> destination, double weight) {
+    public Edge(E label, Vertex<V, E> destination, double weight) {
         this.label = label;
         this.destination = destination;
         this.weight = weight;
@@ -17,7 +17,7 @@ public class Edge<U, V> {
         return "(" + label + ":" + weight + ") ";
     }
 
-    public Vertex<U, V> getDestination() {
+    public Vertex<V, E> getDestination() {
         return destination;
     }
 
@@ -25,7 +25,7 @@ public class Edge<U, V> {
         return weight;
     }
 
-    public V getLabel() {
+    public E getLabel() {
         return label;
     }
 }
