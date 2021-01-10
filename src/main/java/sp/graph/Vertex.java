@@ -20,10 +20,6 @@ public class Vertex<V, E> {
         return edges.size();
     }
 
-    public boolean hasEdge(Edge<V, E> e) {
-        return (edges.contains(e));
-    }
-
     public void addEdge(Edge<V, E> e) {
         edges.add(e);
     }
@@ -38,10 +34,7 @@ public class Vertex<V, E> {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(label.toString()).append(": ");
-        for (Edge<V, E> edge : edges) stringBuilder.append(edge.toString());
-        return stringBuilder.toString();
+        return "Vertex of " + label + " (" + edges.size() + " edges)";
     }
 
     public boolean equals(Vertex<V, E> v) {

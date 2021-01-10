@@ -33,6 +33,10 @@ public class Stop extends GenericGtfsVO {
         return stops.get(id);
     }
 
+    public static HashMap<Integer, Stop> getStops() {
+        return stops;
+    }
+
     @Override
     public void register() {
         stops.put(id, this);
@@ -43,7 +47,9 @@ public class Stop extends GenericGtfsVO {
         return name;
     }
 
-    public String getAddress() { return (description.isEmpty()?latitude+","+longitude:description); }
+    public String getCoordinates() {
+        return latitude + "," + longitude;
+    }
 
     public double getLatitude() {
         return latitude;

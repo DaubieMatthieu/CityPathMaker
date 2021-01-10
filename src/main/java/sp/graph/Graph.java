@@ -6,7 +6,7 @@ import java.util.*;
 // is weighted but with default value 1, so it can be used without weight
 
 public class Graph<V, E> {
-    protected final static HashMap<String, Graph> instances = new HashMap<>(); //TODO can we remove this ?
+    protected final static HashMap<String, Graph> instances = new HashMap<>();
     protected final String instanceName;
     protected final HashMap<V, Vertex<V, E>> vertexes = new HashMap<>();
     protected final boolean directed;
@@ -50,6 +50,7 @@ public class Graph<V, E> {
     }
 
     public void addEdge(V source, V destination, E link, double weight) {
+        if (!weighted) weight = 1.0;
         Vertex<V, E> s = getVertex(source);
         Vertex<V, E> d = getVertex(destination);
         if (s == null) {
@@ -95,11 +96,7 @@ public class Graph<V, E> {
 
     public void print(boolean verbose) {
         if (verbose) {
-            String description = "";
-            description += (weighted) ? "weighted " : "unweighted ";
-            description += (directed) ? "directed " : "bidirectional ";
-            description += toString();
-            System.out.println(description);
+            System.out.println(toString());
             System.out.println("Size: " + getSize());
             System.out.println("Order: " + getOrder());
             System.out.println((verifyNonNegative() ? "is non negative" : "has negative weights"));
@@ -111,6 +108,9 @@ public class Graph<V, E> {
 
     @Override
     public String toString() {
-        return "graph " + instanceName;
+        String description = "";
+        description += (weighted) ? "weighted " : "unweighted ";
+        description += (directed) ? "directed " : "bidirectional ";
+        return description + "graph '" + instanceName + "'";
     }
 }

@@ -13,8 +13,7 @@ public class Edge<V, E> {
 
     @Override
     public String toString() {
-        String label = destination.getLabel().toString();
-        return "(" + label + ":" + weight + ") ";
+        return "Edge to " + destination.getLabel() + " through " + label + " weight:" + weight;
     }
 
     public Vertex<V, E> getDestination() {

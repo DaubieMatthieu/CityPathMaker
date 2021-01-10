@@ -42,4 +42,8 @@ public class StopTime extends GenericGtfsVO {
     public String toString() {
         return "Stop Time for " + stop + " on " + trip;
     }
+
+    public Stop getStop() {
+        return stop;
+    }
 }

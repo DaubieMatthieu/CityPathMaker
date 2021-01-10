@@ -38,6 +38,20 @@ public class Trip extends GenericGtfsVO {
 
     @Override
     public String toString() {
-        return "Direction " + directionId + " on " + route + " (" + id + ")";
+        return "Direction " + directionId + " on " + route;
+    }
+
+    //Might be different for more complex gtfs data set, but better for the one we use
+    public boolean equals(Trip trip) {
+        if (trip == null) return false;
+        return this.route == trip.route && this.directionId == trip.directionId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Route getRoute() {
+        return route;
     }
 }
