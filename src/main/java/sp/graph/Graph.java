@@ -79,6 +79,15 @@ public class Graph<V, E> {
         return order;
     }
 
+    public Collection<Vertex<V, E>> getVertexes() {
+        return vertexes.values();
+    }
+
+    public Vertex<V, E> getParentVertex(Edge<V, E> edge) {
+        for (Vertex<V, E> vertex : vertexes.values()) if (vertex.hasEdge(edge)) return vertex;
+        return null;
+    }
+
     public Set<Edge<V, E>> getEdges() {
         Set<Edge<V, E>> edges = new HashSet<>();
         for (Vertex<V, E> v : vertexes.values()) edges.addAll(v.getEdges());

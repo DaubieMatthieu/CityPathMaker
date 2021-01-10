@@ -46,6 +46,32 @@ public final class Path<V, E> extends LinkedList<Vertex<V, E>> {
         cost = directedTree.get(destination).getCost();
     }
 
+    //clone an existing path and add the new Source at the beginning
+    //newSource has to have an edge to the previous source
+    public Path(Path<V, E> path, Vertex<V, E> newSource) {
+        super(path);
+        Edge<V, E> linkEdge = newSource.getEdgeTo(path.source);
+        if (linkEdge == null)
+            throw new IllegalArgumentException("Given new source does not have edge to previous source");
+        this.graph = path.graph;
+        addFirst(newSource);
+        this.source = newSource;
+        this.destination = path.destination;
+        this.algorithm = path.algorithm;
+        this.cost = path.cost + linkEdge.getWeight();
+        this.isPath = path.isPath;
+    }
+
+    //create path with unique node as source and destination
+    public Path(Graph<V, E> graph, Vertex<V, E> vertex) {
+        this.graph = graph;
+        this.source = vertex;
+        this.destination = vertex;
+        this.algorithm = null;
+        this.cost = 0;
+        this.isPath = true;
+    }
+
     public double getCost() {
         return cost;
     }
@@ -73,7 +99,7 @@ public final class Path<V, E> extends LinkedList<Vertex<V, E>> {
         }
         StringJoiner sj = new StringJoiner(System.lineSeparator());
         for (int i = 0; i < size() - 1; i++) {
-            Vertex<V, E> s = get(1);
+            Vertex<V, E> s = get(i);
             Vertex<V, E> d = get(i + 1);
             Edge<V, E> link = s.getEdgeTo(d);
             sj.add("    " + s.getLabel() + " => " + link.getLabel() + " => " + d.getLabel());

@@ -17,11 +17,31 @@ public class Vertex<V, E> {
     }
 
     public int getDegree() {
+        return getInDegree() + getOutDegree();
+    }
+
+    public int getInDegree() {
+        int inDegree = 0;
+        for (Edge<V, E> edge : getEdges()) {
+            if (edge.getDestination().hasEdgeTo(this)) inDegree++; //entering edge
+        }
+        return inDegree;
+    }
+
+    public int getOutDegree() {
         return edges.size();
     }
 
     public void addEdge(Edge<V, E> e) {
         edges.add(e);
+    }
+
+    public boolean hasEdge(Edge<V, E> e) {
+        return edges.contains(e);
+    }
+
+    public boolean hasEdgeTo(Vertex<V, E> v) {
+        return getEdgeTo(v) != null;
     }
 
     public V getLabel() {
