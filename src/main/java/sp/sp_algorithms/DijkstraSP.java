@@ -12,6 +12,10 @@ public class DijkstraSP<V, E> extends SPAlgorithm<V, E> {
         super(graph, source, destination);
     }
 
+    public DijkstraSP(Graph<V, E> graph, Vertex<V, E> source, Vertex<V, E> destination) {
+        super(graph, source, destination);
+    }
+
     @Override
     protected void computeDirectedTree() {
         directedTree = new DirectedTree<>();

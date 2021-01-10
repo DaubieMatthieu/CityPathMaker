@@ -10,10 +10,15 @@ public abstract class SPAlgorithm<V, E> {
     protected DirectedTree<V, E> directedTree;
     protected Path<V, E> path;
 
+
     public SPAlgorithm(Graph<V, E> graph, V source, V destination) {
+        this(graph, graph.getVertex(source), graph.getVertex(destination));
+    }
+
+    public SPAlgorithm(Graph<V, E> graph, Vertex<V, E> source, Vertex<V, E> destination) {
         this.graph = graph;
-        this.source = graph.getVertex(source);
-        this.destination = graph.getVertex(destination);
+        this.source = source;
+        this.destination = destination;
         if (this.source == null) throw new IllegalArgumentException("Source " + source + " not in graph " + graph);
         if (this.destination == null)
             throw new IllegalArgumentException("Destination " + destination + " not in graph " + graph);
