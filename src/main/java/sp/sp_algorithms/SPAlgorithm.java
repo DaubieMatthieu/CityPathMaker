@@ -31,5 +31,11 @@ public abstract class SPAlgorithm<V, E> {
         return path;
     }
 
-    public String toString() { return this.getClass().getSimpleName(); }
+    public String toString() {
+        return "Algorithm " + getName() + " to find shortest path between " + source.getLabel() + " and " + destination.getLabel() + " in " + graph;
+    }
+
+    public String getName() {
+        return this.getClass().getSimpleName();
+    }
 }

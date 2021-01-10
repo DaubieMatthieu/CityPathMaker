@@ -1,9 +1,12 @@
 package main.java.sp.sp_algorithms;
 
-import javafx.util.Pair;
 import main.java.sp.graph.Vertex;
 
 import java.util.HashMap;
 
-public class DirectedTree<U, V> extends HashMap<Vertex<U, V>, Pair<Vertex<U, V>, Double>> {
+
+//the directed tree is a tool to visit a graph vertexes,
+//nodes are representation of the vertexes for the directed tree (it's a couple (vertex,cost))
+//for each entry, the key is a vertex, and the value is the parent node in the directed tree
+public class DirectedTree<V, E> extends HashMap<Vertex<V, E>, Node<V, E>> {
 }

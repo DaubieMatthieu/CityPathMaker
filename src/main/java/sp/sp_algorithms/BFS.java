@@ -4,19 +4,18 @@ import main.java.sp.graph.Edge;
 import main.java.sp.graph.Graph;
 import main.java.sp.graph.Vertex;
 
-import java.util.PriorityQueue;
+import java.util.ArrayDeque;
 
-public class DijkstraSP<V, E> extends SPAlgorithm<V, E> {
+public class BFS<V, E> extends SPAlgorithm<V, E> {
 
-    public DijkstraSP(Graph<V, E> graph, V source, V destination) {
+    public BFS(Graph<V, E> graph, V source, V destination) {
         super(graph, source, destination);
     }
 
     @Override
     protected void computeDirectedTree() {
         directedTree = new DirectedTree<>();
-        //using a priority queue allows to explore the graph from the least expensive non visited node
-        PriorityQueue<Node<V, E>> nodesToVisit = new PriorityQueue<>();
+        ArrayDeque<Node<V, E>> nodesToVisit = new ArrayDeque<>();
         Node<V, E> sourceNode = new Node<>(source, 0);
         //the source node is its own parent node
         directedTree.put(source, sourceNode);
@@ -27,15 +26,10 @@ public class DijkstraSP<V, E> extends SPAlgorithm<V, E> {
             Vertex<V, E> parentVertex = parentNode.getVertex();
             for (Edge<V, E> edge : parentVertex.getEdges()) {
                 Vertex<V, E> childVertex = edge.getDestination();
-                Double weight = edge.getWeight();
-                Double cost = parentNode.getCost() + weight;
-                if (directedTree.containsKey(childVertex)) {
-                    //if accessing the child node is less expensive from this node,
-                    //we replace the parent node of this child node in the directed tree
-                    if (directedTree.get(childVertex).getCost() > cost) {
-                        directedTree.put(childVertex, parentNode);
-                    }
-                } else {
+                double cost = parentNode.getCost() + 1;
+                //if the child vertex has already been visited, it must have been by a shorter path
+                //therefore we ignore it
+                if (!directedTree.containsKey(childVertex)) {
                     directedTree.put(childVertex, new Node<>(parentVertex, cost));
                     Node<V, E> childNode = new Node<>(childVertex, cost);
                     nodesToVisit.add(childNode);
