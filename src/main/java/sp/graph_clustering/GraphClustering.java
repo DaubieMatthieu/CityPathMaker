@@ -1,10 +1,13 @@
 package main.java.sp.graph_clustering;
 
+import main.java.helpers.utilityHelper;
 import main.java.sp.graph.Edge;
 import main.java.sp.graph.Graph;
 import main.java.sp.graph.Vertex;
+import main.java.sp.sp_algorithms.DijkstraSP;
 import main.java.sp.sp_algorithms.Path;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class GraphClustering<V, E> {
@@ -22,42 +25,60 @@ public class GraphClustering<V, E> {
     //create a path between every node of the graph and
     // calculates edge betweenness of each edge in the graph
     private void scanGraph() {
+        long start = System.currentTimeMillis();
         Collection<Vertex<V, E>> vertexes = graph.getVertexes();
+        int count=0;
+        double total = vertexes.size()*vertexes.size();
         for (Vertex<V, E> source : vertexes) {
             for (Vertex<V, E> destination : vertexes) {
-                if (source.equals(destination)) break;
-                createPath(source, destination);
-                Path<V, E> path = graphPaths.get(source).get(destination);
-                if (path != null) {
-                    for (int i = 0; i < path.size() - 1; i++) {
-                        Vertex<V, E> s = path.get(i);
-                        Vertex<V, E> d = path.get(i + 1);
-                        Edge<V, E> link = s.getEdgeTo(d);
-                        int edgeBetweenness = edgeBetweennesses.getOrDefault(link, 0);
-                        edgeBetweennesses.put(link, edgeBetweenness + 1);
-                    }
+                printProgression(count,total);
+                if (count == total/4 || count == total/2 || count == 3*total/4) {
+                    System.out.println("");
+                    printDuration(start, System.currentTimeMillis());
                 }
+                createPath(source, destination, new LinkedList<>());
+                count++;
             }
         }
+        long end = System.currentTimeMillis();
+        printDuration(start, end);
     }
+
+    public void printProgression(double count, double total) {
+        System.out.print(new DecimalFormat("#.##").format(count/total*100)+"%\r");
+    }
+
+    public void printDuration(long start, long end) {
+        System.out.println(utilityHelper.timeToHMS((end-start)/1000));
+    }
+
+
 
     //recursively calculates the shortest path between source and destination
     //then store the computed path in the graphPaths Map
     //all recursively calculated path will also be stored for reuse
-    private void createPath(Vertex<V, E> source, Vertex<V, E> destination) {
+    //don't call the except Vertex, which is the vertex calling this method
+    //if this parent vertex was not excepted, the algorithm would loop itself indefinitely
+    private void createPath(Vertex<V, E> source, Vertex<V, E> destination, List<Vertex<V,E>> except) {
+        if (source==destination) return;
+        if (!graphPaths.containsKey(source)) graphPaths.put(source, new HashMap<>());
+        if (graphPaths.get(source).containsKey(destination)) return; //this path has already been computed
         HashSet<Path<V, E>> paths = new HashSet<>();
+        List<Vertex<V,E>> newExcept = new LinkedList<>(except);
+        newExcept.add(source);
         for (Edge<V, E> edge : source.getEdges()) {
             Vertex<V, E> neighbourVertex = edge.getDestination();
+            if (except.contains(neighbourVertex)) break; //would create an infinite loop
             Path<V, E> neighbourVertexPath;
             if (neighbourVertex == destination) {
                 neighbourVertexPath = new Path<>(graph, neighbourVertex);
             } else {
-                if (!graphPaths.containsKey(neighbourVertex)) graphPaths.put(neighbourVertex, new HashMap<>());
-                HashMap<Vertex<V, E>, Path<V, E>> neighbourVertexPaths = graphPaths.get(neighbourVertex);
-                if (!neighbourVertexPaths.containsKey(destination)) createPath(neighbourVertex, destination);
-                neighbourVertexPath = neighbourVertexPaths.get(destination);
+                createPath(neighbourVertex, destination, newExcept);
+                neighbourVertexPath = graphPaths.get(neighbourVertex).get(destination);
             }
-            if (neighbourVertexPath != null) paths.add(new Path<>(neighbourVertexPath, source));
+            if (neighbourVertexPath != null) {
+                paths.add(new Path<>(neighbourVertexPath, source));
+            }
         }
         double bestCost = Double.MAX_VALUE;
         Path<V, E> bestPath = null;
@@ -67,8 +88,38 @@ public class GraphClustering<V, E> {
                 bestPath = path;
             }
         }
-        if (!graphPaths.containsKey(source)) graphPaths.put(source, new HashMap<>());
+        if (bestPath==null) {
+            if (new DijkstraSP<>(graph, source, destination).getPath().isPath()) {
+                //throw new IllegalStateException("path not found while path");
+            }
+        }
         graphPaths.get(source).put(destination, bestPath);
+        computeEdgeBetweeness(source,destination);
+    }
+
+    public void computeEdgeBetweeness(Vertex<V, E> source, Vertex<V, E> destination) {
+        Path<V, E> path = graphPaths.get(source).get(destination);
+        if (path == null) return;
+        for (int i = 0; i < path.size() - 1; i++) {
+            Vertex<V, E> s = path.get(i);
+            Vertex<V, E> d = path.get(i + 1);
+            Edge<V, E> link = s.getEdgeTo(d);
+            int edgeBetweenness = edgeBetweennesses.getOrDefault(link, 0);
+            edgeBetweennesses.put(link, edgeBetweenness + 1);
+        }
+    }
+
+    public void pause() {
+        Scanner scanner = new Scanner(System.in);
+        String str = scanner.next();
+    }
+
+    public void checkEB() {
+        System.out.println(edgeBetweennesses.size());
+        System.out.println(graph.getEdges().size());
+        for (int eb: edgeBetweennesses.values()) {
+            if (eb==0) throw new IllegalStateException("null eb");
+        }
     }
 
     //recursively creates cluster, by taking the next bridge
@@ -121,6 +172,7 @@ public class GraphClustering<V, E> {
     private Edge<V, E> getNextClusterBridge() {
         Edge<V, E> lastBridge = (clusterBridges.isEmpty()) ? null : clusterBridges.getLast();
         Edge<V, E> nextBridge = null;
+        System.out.println(lastBridge);
         int maxBetweenness = 0;
         for (Edge<V, E> edge : edgeBetweennesses.keySet()) {
             if (edge == lastBridge) break;
@@ -130,6 +182,7 @@ public class GraphClustering<V, E> {
                 maxBetweenness = betweenness;
             }
         }
+        System.out.println(nextBridge+" : "+edgeBetweennesses.get(nextBridge));
         clusterBridges.addLast(nextBridge);
         return nextBridge;
     }

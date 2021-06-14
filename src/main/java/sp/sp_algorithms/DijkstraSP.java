@@ -25,10 +25,10 @@ public class DijkstraSP<V, E> extends SPAlgorithm<V, E> {
         //the source node is its own parent node
         directedTree.put(source, sourceNode);
         nodesToVisit.add(sourceNode);
-        whileLoop:
         while (!nodesToVisit.isEmpty()) {
             Node<V, E> parentNode = nodesToVisit.poll();
             Vertex<V, E> parentVertex = parentNode.getVertex();
+            if (parentVertex.equals(destination)) break;
             for (Edge<V, E> edge : parentVertex.getEdges()) {
                 Vertex<V, E> childVertex = edge.getDestination();
                 Double weight = edge.getWeight();
@@ -44,7 +44,6 @@ public class DijkstraSP<V, E> extends SPAlgorithm<V, E> {
                     Node<V, E> childNode = new Node<>(childVertex, cost);
                     nodesToVisit.add(childNode);
                 }
-                if (childVertex.equals(destination)) break whileLoop;
             }
         }
     }

@@ -11,7 +11,7 @@ public final class Path<V, E> extends LinkedList<Vertex<V, E>> {
     private final Graph<V, E> graph;
     private final Vertex<V, E> source;
     private final Vertex<V, E> destination;
-    private final SPAlgorithm<V, E> algorithm;
+    private final String algorithm;
     private final double cost;
     private final boolean isPath;
 
@@ -30,7 +30,7 @@ public final class Path<V, E> extends LinkedList<Vertex<V, E>> {
         this.source = algorithm.source;
         this.destination = algorithm.destination;
         DirectedTree<V, E> directedTree = algorithm.directedTree;
-        this.algorithm = algorithm;
+        this.algorithm = algorithm.getName();
         isPath = directedTree.containsKey(this.destination);
         if (!isPath) {
             cost = -1;
@@ -67,9 +67,10 @@ public final class Path<V, E> extends LinkedList<Vertex<V, E>> {
         this.graph = graph;
         this.source = vertex;
         this.destination = vertex;
-        this.algorithm = null;
+        this.algorithm = "Unknown algorithm";
         this.cost = 0;
         this.isPath = true;
+        add(vertex);
     }
 
     public double getCost() {
@@ -110,7 +111,7 @@ public final class Path<V, E> extends LinkedList<Vertex<V, E>> {
     }
 
     public String toString() {
-        return "Shortest path from " + source + " to " + destination + " in " + graph + " with " + algorithm.getName();
+        return "Shortest path from " + source + " to " + destination + " in " + graph + " with " + algorithm;
     }
 
 

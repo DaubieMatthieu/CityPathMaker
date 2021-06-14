@@ -46,4 +46,19 @@ public interface utilityHelper {
         }
         return randomElement;
     }
+
+    static String timeToHMS(long tempsS) {
+        int h = (int) (tempsS / 3600);
+        int m = (int) ((tempsS % 3600) / 60);
+        int s = (int) (tempsS % 60);
+
+        String r="";
+
+        if(h>0) {r+=h+" h ";}
+        if(m>0) {r+=m+" min ";}
+        if(s>0) {r+=s+" s";}
+        if(h<=0 && m<=0 && s<=0) {r="0 s";}
+
+        return r;
+    }
 }

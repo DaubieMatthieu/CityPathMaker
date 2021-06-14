@@ -3,6 +3,7 @@ package main.java;
 import main.java.gtfs_vo.Stop;
 import main.java.gtfs_vo.Trip;
 import main.java.helpers.gtfsHelper;
+import main.java.sp.graph.Graph;
 import main.java.sp.graph_clustering.Cluster;
 import main.java.sp.graph_clustering.GraphClustering;
 import main.java.sp.sp_algorithms.BFS;
@@ -14,8 +15,8 @@ public class Main {
 
     public static void main(String[] args) {
         gtfsHelper.scanResources();
-        launchSPTests();
-        //launchClusteringTest();
+        //launchSPTests();
+        launchClusteringTest();
     }
 
     public static void launchSPTests() {
@@ -28,17 +29,18 @@ public class Main {
 
     public static void launchClusteringTest() {
         GraphClustering<Stop, Trip> graphClustering;
+        Graph<Stop, Trip> graph = Demo.instantiateGraph(true);
+        System.out.println("Calculating the edge betweennesses in "+graph);
         try {
-            graphClustering = new GraphClustering<>(Demo.instantiateGraph(true));
+            graphClustering = new GraphClustering<>(graph);
         } catch (StackOverflowError e) {
             System.out.println("Could not show the Graph Clustering results, stack overflow");
             return;
         }
-        Set<Cluster<Stop, Trip>> clusters = graphClustering.getClusters(10);
+        System.out.println("Calculating the clusters in "+graph);
+        Set<Cluster<Stop, Trip>> clusters = graphClustering.getClusters(5);
         for (Cluster<Stop, Trip> cluster : clusters) {
             System.out.println("Cluster: " + cluster.size());
         }
     }
-
-
 }

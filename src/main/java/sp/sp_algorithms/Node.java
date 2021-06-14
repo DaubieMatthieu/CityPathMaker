@@ -11,8 +11,8 @@ public class Node<V, E> extends Pair<Vertex<V, E>, Double> implements Comparable
 
     @Override
     public int compareTo(Node<V, E> o) {
-        if (this.getValue() > o.getValue()) return 1;
-        if (this.getValue().equals(o.getValue())) return 0;
+        if (this.getCost() > o.getCost()) return 1;
+        if (this.getCost().equals(o.getCost())) return 0;
         return -1;
     }
 

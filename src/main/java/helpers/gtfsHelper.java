@@ -28,14 +28,10 @@ public interface gtfsHelper {
         assert zippedFiles != null;
         //order is important because some objects initiate themselves by linking with other objects,
         // which therefore need to be already initiated
-        //skipped initiation of currently unused tables
         gtfsHelper.initiateVOFrom(zippedFiles.get("stops.txt"), Stop.class);
         gtfsHelper.initiateVOFrom(zippedFiles.get("routes.txt"), Route.class);
-        //gtfsHelper.initiateVOFrom(zippedFiles.get("shapes.txt"), Shape.class);
         gtfsHelper.initiateVOFrom(zippedFiles.get("trips.txt"), Trip.class);
         gtfsHelper.initiateVOFrom(zippedFiles.get("stop_times.txt"), StopTime.class);
-        //gtfsHelper.initiateVOFrom(zippedFiles.get("calendar.txt"), Service.class);
-        //gtfsHelper.initiateVOFrom(zippedFiles.get("calendar_dates.txt"), CalendarDate.class);
     }
 
     //can be called with full path or with relative path from resources/gtfs

@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.StringJoiner;
 
 public class Demo {
-    private static final int verboseLevel = 3;
+    private static final int verboseLevel = 2;
     private static Stop source;
     private static Stop destination;
     private final boolean showMapURI = true;
@@ -40,14 +40,13 @@ public class Demo {
     public static Graph<Stop, Trip> instantiateGraph(boolean weighted) {
         if (verboseLevel >= 2) System.out.println("Instantiating graph");
         HashMap<Integer, Trip> trips = Trip.getAllTrips();
-        Graph<Stop, Trip> graph = new Graph<>("Albuquerque map", true, weighted);
+        Graph<Stop, Trip> graph = new Graph<>("Albuquerque map", false, weighted);
         int tripsNumber = trips.size();
         int count = 1;
         if (verboseLevel >= 2) System.out.println("    Adding " + tripsNumber + " trips to the graph");
-        for (int id : trips.keySet()) {
-            Trip trip = trips.get(id);
+        for (Trip trip:trips.values()) {
             assert trip != null;
-            if (verboseLevel >= 3) System.out.printf("    Adding trip %d to graph (%d/%d)\r", id, count, tripsNumber);
+            if (verboseLevel >= 3) System.out.printf("    Adding trip %d to graph (%d/%d)\r", trip.getId(), count, tripsNumber);
             int stopSequence = 1;
             while (StopTime.getStopTime(trip.getId(), stopSequence + 1) != null) {
                 StopTime stopTime1 = StopTime.getStopTime(trip.getId(), stopSequence);
